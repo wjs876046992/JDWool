@@ -2,6 +2,9 @@
 const Env = require('./Env')
 const $ = new Env()
 
+const ql = require('./ql')
+const QYWX_TOKEN_ENV_NAME = 'QYWX_TOKEN'
+
 const timeout = 15000 // 超时时间(单位毫秒)
 const QYWX_AM = process.env.QYWX_CONF
 const pushQYWX = !!QYWX_AM
@@ -32,7 +35,7 @@ let corpid, corpsecret, msgtype, agentid, touser, pinUserMap = {}, accessToken, 
 function sendQYWXAMNotice(pin, title, content, summary = '') {
     if (!QYWX_AM) return
     return new Promise(async (resolve) => {
-        const token = await getCachedAccessToken()
+        const token = await getTokenFromQlEnv()
         const touser = changeUserId(pin)
         const qywxOptions = getQywxOptions(msgtype, title, content, summary);
         const notice = await doSendQYWXNotice(token, touser, agentid, qywxOptions)
@@ -44,15 +47,11 @@ function sendQYWXAMNotice(pin, title, content, summary = '') {
 }
 
 /**
- * 缓存token在内存中
+ * 缓存token到环境变量
  *
  * @returns {Promise<*>}
  */
-async function getCachedAccessToken() {
-    const nowTime = (new Date()).getTime()
-    if (accessToken && accessTokenExpiredAt >= nowTime) {
-        return accessToken
-    }
+async function generateAccessToken() {
     $.log('token已失效，重新获取...')
     const tokenResult = await getQYWXAccessToken(corpid, corpsecret)
     accessToken = tokenResult.access_token
@@ -63,6 +62,32 @@ async function getCachedAccessToken() {
     }
     accessTokenExpiredAt = ((new Date()).getTime()) - (tokenResult.expires_in - 600) * 1000
     return accessToken
+}
+
+/**
+ * 将企业微信API的token缓存到环境变量
+ *
+ * @returns {Promise<void>}
+ */
+async function pushToken2QlEnv(env) {
+    env = env || await ql.getFirstEnv(QYWX_TOKEN_ENV_NAME)
+    if (!env) {
+        await ql.addEnv(QYWX_TOKEN_ENV_NAME, accessToken, accessTokenExpiredAt)
+    } else {
+        env.value = accessToken
+        env.remarks = accessTokenExpiredAt
+        await ql.updateEnv(env)
+    }
+}
+
+async function getTokenFromQlEnv() {
+    const env = await ql.getFirstEnv(QYWX_TOKEN_ENV_NAME)
+    if (!env || (env.value - 0) < (new Date().getTime())) {
+        await generateAccessToken()
+        await pushToken2QlEnv(env)
+    }
+    accessToken = env.value
+    accessTokenExpiredAt = env.remarks - 0
 }
 
 function getQYWXAccessToken(corpid, corpsecret) {

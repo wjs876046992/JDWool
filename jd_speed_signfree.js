@@ -49,16 +49,12 @@ const JD_API_HOST = 'https://api.m.jd.com/';
         }
     }
     if (msg.length) {
-        console.log('有消息,推送消息')
         await notify.sendNotify($.name, msg.join('\n'))
-    } else {
-        console.error('无消息,推送错误')
-        await notify.sendNotify($.name + '错误!!', "无消息可推送!!")
     }
     if (wxNoticeErr.length) {
         const sendWXNotice = $.isNode() ? require('./dep/WXLovelyCat_Notify') : false
         wxNoticeErr.unshift($.name)
-        sendWXNotice && sendWXNotice(wxNoticeErr.join('\n'), )
+        sendWXNotice && sendWXNotice(wxNoticeErr.join('\n'))
     }
 })()
     .catch((e) => {
@@ -132,6 +128,7 @@ function query() {
                 }
             } catch (e) {
                 $.logErr(e, resp)
+                wxNoticeErr.push(($.nickName || $.UserName) + ':')
                 wxNoticeErr.push($.UserName + ': 接口query请求失败，请检查脚本')
             } finally {
                 resolve(data);
@@ -147,6 +144,7 @@ function sign(orderId) {
             try {
                 if (err) {
                     console.error(`${JSON.stringify(err)}`)
+                    wxNoticeErr.push(($.nickName || $.UserName) + ':')
                     wxNoticeErr.push('签到失败，请检查脚本')
                     return
                 }
@@ -157,12 +155,14 @@ function sign(orderId) {
                     msg_temp = $.productName + ' 签到成功'
                 } else {
                     msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
+                    wxNoticeErr.push(($.nickName || $.UserName) + ':')
                     wxNoticeErr.push(msg_temp)
                 }
                 console.log(msg_temp)
                 msg.push(msg_temp)
             } catch (e) {
                 $.logErr(e, resp)
+                wxNoticeErr.push(($.nickName || $.UserName) + ':')
                 wxNoticeErr.push($.UserName + ': 接口sign请求失败，请检查脚本')
             } finally {
                 resolve(data);
@@ -182,6 +182,7 @@ function cash(orderId) {
             try {
                 if (err) {
                     console.error(`${JSON.stringify(err)}`)
+                    wxNoticeErr.push(($.nickName || $.UserName) + ':')
                     wxNoticeErr.push('提现失败，请检查脚本')
                     return
                 }
@@ -192,12 +193,14 @@ function cash(orderId) {
                     msg_temp = $.productName + ' 提现成功'
                 } else {
                     msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
+                    wxNoticeErr.push(($.nickName || $.UserName) + ':')
                     wxNoticeErr.push(msg_temp)
                 }
                 console.log(msg_temp)
                 msg.push(msg_temp)
             } catch (e) {
                 $.logErr(e, resp)
+                wxNoticeErr.push(($.nickName || $.UserName) + ':')
                 wxNoticeErr.push($.UserName + ': 接口cash请求失败，请检查脚本')
             } finally {
                 resolve(data);
