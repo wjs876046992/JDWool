@@ -43,12 +43,17 @@ function QYWXAMNotify(pin, title, content, summary = '') {
     if (!QYWX_AM) return
     return new Promise(async (resolve) => {
         const tokenResult = await getQYWXAccessToken(corpid, corpsecret)
-        const token = tokenResult.accesstoken
-        $.log(JSON.stringify(tokenResult))
+        const token = tokenResult.access_token
+        if (!token) {
+            $.log('access_token获取失败.', JSON.stringify(tokenResult))
+            resolve(false)
+            return
+        }
         const touser = changeUserId(pin)
         const qywxOptions = getQywxOptions(msgtype, title, content, summary);
         const notice = await doSendQYWXNotice(token, touser, agentid, qywxOptions)
         $.log(JSON.stringify(notice))
+        resolve(notice)
     })
 }
 
