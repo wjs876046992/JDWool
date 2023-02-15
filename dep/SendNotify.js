@@ -52,7 +52,7 @@ function QYWXAMNotify(pin, title, content, summary = '') {
         const touser = changeUserId(pin)
         const qywxOptions = getQywxOptions(msgtype, title, content, summary);
         const notice = await doSendQYWXNotice(token, touser, agentid, qywxOptions)
-        $.log(JSON.stringify(notice))
+        $.log(touser, JSON.stringify(qywxOptions), JSON.stringify(notice))
         resolve(notice)
     })
 }
