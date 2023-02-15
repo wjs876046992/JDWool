@@ -36,7 +36,9 @@ function sendQYWXAMNotice(pin, title, content, summary = '') {
         const touser = changeUserId(pin)
         const qywxOptions = getQywxOptions(msgtype, title, content, summary);
         const notice = await doSendQYWXNotice(token, touser, agentid, qywxOptions)
-        $.log(touser, JSON.stringify(qywxOptions), JSON.stringify(notice))
+        if (!notice || notice.errcode !== 0) {
+            $.log(touser, JSON.stringify(qywxOptions), JSON.stringify(notice))
+        }
         resolve(notice)
     })
 }
@@ -51,6 +53,7 @@ async function getCachedAccessToken() {
     if (accessToken && accessTokenExpiredAt >= nowTime) {
         return accessToken
     }
+    $.log('token已失效，重新获取...')
     const tokenResult = await getQYWXAccessToken(corpid, corpsecret)
     accessToken = tokenResult.access_token
     if (!accessToken) {
