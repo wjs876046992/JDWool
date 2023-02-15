@@ -5,20 +5,24 @@ require('dotenv').config()
 const {readFile} = require('fs/promises')
 const fs = require('fs')
 
-let fileExists = fs.existsSync('/ql/data/config/auth.json')
-let authFile = ""
-if (fileExists)
-    authFile = "/ql/data/config/auth.json"
-else {
-    authFile = "/ql/config/auth.json"
-}
-const text = await readFile(authFile)
-const authConfig = JSON.parse(text)
-
 const api = got.extend({
     prefixUrl: 'http://127.0.0.1:5600',
     retry: {limit: 0},
 })
+
+let authConfig
+!(async () => {
+    const fileExists = fs.existsSync('/ql/data/config/auth.json')
+    let authFile = ""
+    if (fileExists)
+        authFile = "/ql/data/config/auth.json"
+    else {
+        authFile = "/ql/config/auth.json"
+    }
+    const text = await readFile(authFile)
+    authConfig = JSON.parse(text)
+
+})()
 async function getToken() {
     return authConfig.token
 }
