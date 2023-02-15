@@ -17,7 +17,8 @@ const UA = $.isNode()
 let cookiesArr = [],
     cookie,
     msg = [],
-    first_flag
+    first_flag,
+    wxNoticeErr = []
 
 const activityId = 'PiuLvM8vamONsWzC0wqBGQ'
 
@@ -54,6 +55,11 @@ const JD_API_HOST = 'https://api.m.jd.com/';
         console.error('无消息,推送错误')
         await notify.sendNotify($.name + '错误!!', "无消息可推送!!")
     }
+    if (wxNoticeErr.length) {
+        const sendWXNotice = $.isNode() ? require('./dep/WXLovelyCat_Notify') : false
+        wxNoticeErr.unshift($.name)
+        sendWXNotice && sendWXNotice(wxNoticeErr.join('\n'), )
+    }
 })()
     .catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
@@ -81,7 +87,7 @@ async function sign_all() {
     await $.wait(3000)
     for (const order of $.signFreeOrderInfoList) {
         // console.debug('2nd now:', order)
-        if (order.needSignDays == order.hasSignDays) {
+        if (order.needSignDays === order.hasSignDays) {
             console.log(order.productName, '可提现,执行提现')
             $.productName = order.productName
             await cash(order.orderId)
@@ -96,32 +102,37 @@ function query() {
             try {
                 if (err) {
                     console.error(`${JSON.stringify(err)}`)
-                } else {
-                    // console.debug('query:', data)
-                    data = JSON.parse(data)
-                    $.signFreeOrderInfoList = data.data.signFreeOrderInfoList
-                    if (data.success) {
-                        if (!data.data.signFreeOrderInfoList) {
-                            console.log("没有需要签到的商品,请到京东极速版[签到免单]购买商品");
-                            msg.push("没有需要签到的商品,请到京东极速版[签到免单]购买商品")
-                        } else {
-                            $.signFreeOrderInfoList = data.data.signFreeOrderInfoList
-                            if (first_flag) {
-                                first_flag = false
-                                console.log("脚本也许随时失效,请注意");
-                                msg.push("脚本也许随时失效,请注意")
-                                if (data.data.risk === false) {
-                                    console.log("风控用户,可能有异常");
-                                    msg.push("风控用户,可能有异常")
-                                }
-                            }
-                        }
-                    } else {
-                        console.error("失败");
+                    wxNoticeErr.push(($.nickName || $.UserName) + ':')
+                    wxNoticeErr.push('查询待签到商品列表失败，请检查脚本并重新执行')
+                    return
+                }
+                // console.debug('query:', data)
+                data = JSON.parse(data)
+                $.signFreeOrderInfoList = data.data.signFreeOrderInfoList
+                if (data.success) {
+                    console.error("失败")
+                    wxNoticeErr.push('未查询到待签到列表，请检查脚本并重新执行')
+                    return
+                }
+                if (!data.data.signFreeOrderInfoList) {
+                    console.log("没有需要签到的商品,请到京东极速版[签到免单]购买商品")
+                    msg.push("没有需要签到的商品,请到京东极速版[签到免单]购买商品")
+                    return
+                }
+                $.signFreeOrderInfoList = data.data.signFreeOrderInfoList
+                if (first_flag) {
+                    first_flag = false
+                    console.log("脚本也许随时失效,请注意")
+                    msg.push("脚本也许随时失效,请注意")
+                    if (data.data.risk === false) {
+                        console.log("风控用户,可能有异常")
+                        msg.push("风控用户,可能有异常")
+                        wxNoticeErr.push('风控用户，可能有异常')
                     }
                 }
             } catch (e) {
                 $.logErr(e, resp)
+                wxNoticeErr.push($.UserName + ': 接口query请求失败，请检查脚本')
             } finally {
                 resolve(data);
             }
@@ -136,20 +147,23 @@ function sign(orderId) {
             try {
                 if (err) {
                     console.error(`${JSON.stringify(err)}`)
-                } else {
-                    // console.debug('sign:', data)
-                    data = JSON.parse(data)
-                    let msg_temp
-                    if (data.success) {
-                        msg_temp = $.productName + ' 签到成功'
-                    } else {
-                        msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
-                    }
-                    console.log(msg_temp)
-                    msg.push(msg_temp)
+                    wxNoticeErr.push('签到失败，请检查脚本')
+                    return
                 }
+                // console.debug('sign:', data)
+                data = JSON.parse(data)
+                let msg_temp
+                if (data.success) {
+                    msg_temp = $.productName + ' 签到成功'
+                } else {
+                    msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
+                    wxNoticeErr.push(msg_temp)
+                }
+                console.log(msg_temp)
+                msg.push(msg_temp)
             } catch (e) {
                 $.logErr(e, resp)
+                wxNoticeErr.push($.UserName + ': 接口sign请求失败，请检查脚本')
             } finally {
                 resolve(data);
             }
@@ -168,20 +182,23 @@ function cash(orderId) {
             try {
                 if (err) {
                     console.error(`${JSON.stringify(err)}`)
-                } else {
-                    // console.debug('cash:', data)
-                    data = JSON.parse(data)
-                    let msg_temp
-                    if (data.success) {
-                        msg_temp = $.productName + ' 提现成功'
-                    } else {
-                        msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
-                    }
-                    console.log(msg_temp)
-                    msg.push(msg_temp)
+                    wxNoticeErr.push('提现失败，请检查脚本')
+                    return
                 }
+                // console.debug('cash:', data)
+                data = JSON.parse(data)
+                let msg_temp
+                if (data.success) {
+                    msg_temp = $.productName + ' 提现成功'
+                } else {
+                    msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
+                    wxNoticeErr.push(msg_temp)
+                }
+                console.log(msg_temp)
+                msg.push(msg_temp)
             } catch (e) {
                 $.logErr(e, resp)
+                wxNoticeErr.push($.UserName + ': 接口cash请求失败，请检查脚本')
             } finally {
                 resolve(data);
             }
