@@ -61,7 +61,6 @@ async function generateAccessToken() {
         throw Error('access_token获取失败')
     }
     accessTokenExpiredAt = ((new Date()).getTime()) - (tokenResult.expires_in - 600) * 1000
-    return accessToken
 }
 
 /**
@@ -82,7 +81,7 @@ async function pushToken2QlEnv(env) {
 
 async function getTokenFromQlEnv() {
     const env = await ql.getFirstEnv(QYWX_TOKEN_ENV_NAME)
-    if (!env || (env.value - 0) < (new Date().getTime())) {
+    if (!env || (env.remarks - 0) < (new Date().getTime())) {
         await generateAccessToken()
         await pushToken2QlEnv(env)
         return

@@ -83,11 +83,22 @@ module.exports.addEnv = async (name, value, remarks) => {
 
 module.exports.updateEnv = async (env) => {
     const token = await getToken()
+    const { _id, id, name, value, remarks } = {...env}
+    let newEnv
+    if (_id) {
+        newEnv = {
+            _id, name, value, remarks
+        }
+    } else {
+        newEnv = {
+            id, name, value, remarks
+        }
+    }
     const body = await api({
         method: 'put',
         url: 'api/envs',
         params: {t: Date.now()},
-        json: env,
+        json: newEnv,
         headers: {
             Accept: 'application/json',
             authorization: `Bearer ${token}`,
