@@ -13,17 +13,19 @@ const api = got.extend({
 let authConfig
 !(async () => {
     const fileExists = fs.existsSync('/ql/data/config/auth.json')
-    let authFile = ""
+    let authFile
     if (fileExists)
         authFile = "/ql/data/config/auth.json"
     else {
         authFile = "/ql/config/auth.json"
     }
     const text = await readFile(authFile)
-    authConfig = JSON.parse(text)
-
+    console.log(text)
+    authConfig = JSON.parse(text.toString())
 })()
+
 async function getToken() {
+    console.log(JSON.stringify(authConfig || '{}'))
     return authConfig.token
 }
 
