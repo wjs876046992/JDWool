@@ -109,9 +109,9 @@ function query() {
                 // console.debug('query:', data)
                 data = JSON.parse(data)
                 $.signFreeOrderInfoList = data.data.signFreeOrderInfoList
-                if (data.success) {
+                if (!data.success) {
                     console.error("失败")
-                    wxNoticeErr.push('未查询到待签到列表，请检查脚本并重新执行')
+                    // wxNoticeErr.push('未查询到待签到列表，请检查脚本并重新执行')
                     return
                 }
                 if (!data.data.signFreeOrderInfoList) {
@@ -124,10 +124,10 @@ function query() {
                     first_flag = false
                     console.log("脚本也许随时失效,请注意")
                     msg.push("脚本也许随时失效,请注意")
-                    if (data.data.risk === false) {
+                    if (data.data.risk) {
                         console.log("风控用户,可能有异常")
                         msg.push("风控用户,可能有异常")
-                        wxNoticeErr.push('风控用户，可能有异常')
+                        // wxNoticeErr.push('风控用户，可能有异常')
                     }
                 }
             } catch (e) {
