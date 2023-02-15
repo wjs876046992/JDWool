@@ -61,7 +61,6 @@ async function generateAccessToken() {
         throw Error('access_token获取失败')
     }
     accessTokenExpiredAt = ((new Date()).getTime()) - (tokenResult.expires_in - 600) * 1000
-    return accessToken
 }
 
 /**
