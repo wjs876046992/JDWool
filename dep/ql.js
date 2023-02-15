@@ -10,22 +10,18 @@ const api = got.extend({
     retry: {limit: 0},
 })
 
-let authConfig
-!(async () => {
-    const fileExists = fs.existsSync('/ql/data/config/auth.json')
-    let authFile
-    if (fileExists)
-        authFile = "/ql/data/config/auth.json"
-    else {
-        authFile = "/ql/config/auth.json"
-    }
-    const text = await readFile(authFile)
-    console.log(text)
-    authConfig = JSON.parse(text.toString())
-})()
+const fileExists = fs.existsSync('/ql/data/config/auth.json')
+let authFile
+if (fileExists)
+    authFile = "/ql/data/config/auth.json"
+else {
+    authFile = "/ql/config/auth.json"
+}
 
 async function getToken() {
-    console.log(JSON.stringify(authConfig || '{}'))
+    const text = await readFile(authFile)
+    console.log(text)
+    const authConfig = JSON.parse(text.toString())
     return authConfig.token
 }
 
