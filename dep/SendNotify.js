@@ -43,9 +43,11 @@ function QYWXAMNotify(pin, title, content, summary = '') {
     if (!QYWX_AM) return
     return new Promise(async (resolve) => {
         const token = await getQYWXAccessToken(corpid, corpsecret)
+        $.log(token)
         const touser = changeUserId(pin)
         const qywxOptions = getQywxOptions(msgtype, title, content, summary);
-        await doSendQYWXNotice(token, touser, agentid, qywxOptions)
+        const notice = await doSendQYWXNotice(token, touser, agentid, qywxOptions)
+        $.log(JSON.stringify(notice))
     })
 }
 
