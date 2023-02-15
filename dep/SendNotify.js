@@ -42,8 +42,9 @@ async function sendNotify(title, content, summary = '', pin = '') {
 function QYWXAMNotify(pin, title, content, summary = '') {
     if (!QYWX_AM) return
     return new Promise(async (resolve) => {
-        const token = await getQYWXAccessToken(corpid, corpsecret)
-        $.log(token)
+        const tokenResult = await getQYWXAccessToken(corpid, corpsecret)
+        const token = tokenResult.accesstoken
+        $.log(JSON.stringify(tokenResult))
         const touser = changeUserId(pin)
         const qywxOptions = getQywxOptions(msgtype, title, content, summary);
         const notice = await doSendQYWXNotice(token, touser, agentid, qywxOptions)
@@ -67,7 +68,7 @@ function getQYWXAccessToken(corpid, corpsecret) {
         $.post(options, (_err, _resp, data) => {
             if (_err) throw _err
             const json = JSON.parse(data)
-            resolve(json.accesstoken)
+            resolve(json)
         })
     })
 }
