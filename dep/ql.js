@@ -20,7 +20,6 @@ else {
 
 async function getToken() {
     const text = await readFile(authFile)
-    console.log(text)
     const authConfig = JSON.parse(text.toString())
     return authConfig.token
 }

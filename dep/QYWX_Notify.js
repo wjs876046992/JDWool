@@ -35,10 +35,10 @@ let corpid, corpsecret, msgtype, agentid, touser, pinUserMap = {}, accessToken, 
 function sendQYWXAMNotice(pin, title, content, summary = '') {
     if (!QYWX_AM) return
     return new Promise(async (resolve) => {
-        const token = await getTokenFromQlEnv()
+        await getTokenFromQlEnv()
         const touser = changeUserId(pin)
         const qywxOptions = getQywxOptions(msgtype, title, content, summary);
-        const notice = await doSendQYWXNotice(token, touser, agentid, qywxOptions)
+        const notice = await doSendQYWXNotice(accessToken, touser, agentid, qywxOptions)
         if (!notice || notice.errcode !== 0) {
             $.log(touser, JSON.stringify(qywxOptions), JSON.stringify(notice))
         }
@@ -72,10 +72,10 @@ async function generateAccessToken() {
 async function pushToken2QlEnv(env) {
     env = env || await ql.getFirstEnv(QYWX_TOKEN_ENV_NAME)
     if (!env) {
-        await ql.addEnv(QYWX_TOKEN_ENV_NAME, accessToken, accessTokenExpiredAt)
+        await ql.addEnv(QYWX_TOKEN_ENV_NAME, accessToken, "" + accessTokenExpiredAt)
     } else {
         env.value = accessToken
-        env.remarks = accessTokenExpiredAt
+        env.remarks = "" + accessTokenExpiredAt
         await ql.updateEnv(env)
     }
 }
@@ -85,6 +85,7 @@ async function getTokenFromQlEnv() {
     if (!env || (env.value - 0) < (new Date().getTime())) {
         await generateAccessToken()
         await pushToken2QlEnv(env)
+        return
     }
     accessToken = env.value
     accessTokenExpiredAt = env.remarks - 0
