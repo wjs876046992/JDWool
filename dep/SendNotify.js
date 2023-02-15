@@ -4,7 +4,7 @@ const $ = new Env()
 
 const timeout = 15000 // 超时时间(单位毫秒)
 const QYWX_AM = process.env.QYWX_CONF
-const pushQYWX = !QYWX_AM
+const pushQYWX = !!QYWX_AM
 let corpid, corpsecret, msgtype, agentid, touser, pinUserMap
 !(() => {
     if (!pushQYWX) {
