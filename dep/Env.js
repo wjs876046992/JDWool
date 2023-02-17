@@ -383,6 +383,13 @@ function Env(t, e) {
                 s = (e - this.startTime) / 1e3;
             this.log("", `🔔${this.name}, 结束! 🕛 ${s} 秒`), this.log(), (this.isSurge() || this.isQuanX() || this.isLoon()) && $done(t)
         }
+
+        randomWaitTime(min = 4, max = 8) {
+            if (min >= max) {
+                return min * 1000;
+            }
+            return Math.floor(1000 * (min + Math.random() * (max - min)))
+        }
     }(t, e)
 }
 

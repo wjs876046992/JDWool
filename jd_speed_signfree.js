@@ -72,23 +72,23 @@ async function sign_all() {
     if (!$.signFreeOrderInfoList) {
         return
     }
-    await $.wait(3000)
+    await $.wait($.randomWaitTime())
     for (const order of $.signFreeOrderInfoList) {
         // console.debug('now:', order)
         $.productName = order.productName
         await sign(order.orderId)
-        await $.wait(3000)
+        await $.wait($.randomWaitTime())
     }
-    await $.wait(3000)
+    await $.wait($.randomWaitTime())
     await query()
-    await $.wait(3000)
+    await $.wait($.randomWaitTime())
     for (const order of $.signFreeOrderInfoList) {
         // console.debug('2nd now:', order)
         if (order.needSignDays === order.hasSignDays) {
             console.log(order.productName, '可提现,执行提现')
             $.productName = order.productName
             await cash(order.orderId)
-            await $.wait(3000)
+            await $.wait($.randomWaitTime())
         }
     }
 }

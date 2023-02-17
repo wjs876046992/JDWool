@@ -52,7 +52,7 @@ function sendQYWXAMNotice(pin, title, content, summary = '') {
  * @returns {Promise<*>}
  */
 async function generateAccessToken() {
-    $.log('token已失效，重新获取...')
+    $.log('QYWX token已失效，重新获取...')
     const tokenResult = await getQYWXAccessToken(corpid, corpsecret)
     accessToken = tokenResult.access_token
     if (!accessToken) {
