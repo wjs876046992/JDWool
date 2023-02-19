@@ -99,8 +99,8 @@ function query() {
             try {
                 if (err) {
                     console.error(`${JSON.stringify(err)}`)
-                    wxNoticeErr.push(($.nickName || $.UserName) + ':')
-                    wxNoticeErr.push('查询待签到商品列表失败，请检查脚本并重新执行')
+                    // wxNoticeErr.push(($.nickName || $.UserName) + ':')
+                    // wxNoticeErr.push('查询待签到商品列表失败，请检查脚本并重新执行')
                     return
                 }
                 // console.debug('query:', data)
@@ -129,8 +129,8 @@ function query() {
                 }
             } catch (e) {
                 $.logErr(e, resp)
-                wxNoticeErr.push(($.nickName || $.UserName) + ':')
-                wxNoticeErr.push($.UserName + ': 接口query请求失败，请检查脚本')
+                // wxNoticeErr.push(($.nickName || $.UserName) + ':')
+                // wxNoticeErr.push($.UserName + ': 接口query请求失败，请检查脚本')
             } finally {
                 resolve(data);
             }
@@ -145,8 +145,8 @@ function sign(orderId) {
             try {
                 if (err) {
                     console.error(`${JSON.stringify(err)}`)
-                    wxNoticeErr.push(($.nickName || $.UserName) + ':')
-                    wxNoticeErr.push('签到失败，请检查脚本')
+                    // wxNoticeErr.push(($.nickName || $.UserName) + ':')
+                    // wxNoticeErr.push('签到失败，请检查脚本')
                     return
                 }
                 // console.debug('sign:', data)
@@ -154,17 +154,17 @@ function sign(orderId) {
                 let msg_temp
                 if (data.success) {
                     msg_temp = $.productName + ' 签到成功'
-                } else {
-                    msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
                     wxNoticeErr.push(($.nickName || $.UserName) + ':')
                     wxNoticeErr.push(msg_temp)
+                } else {
+                    msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
                 }
                 console.log(msg_temp)
                 msg.push(msg_temp)
             } catch (e) {
                 $.logErr(e, resp)
-                wxNoticeErr.push(($.nickName || $.UserName) + ':')
-                wxNoticeErr.push($.UserName + ': 接口sign请求失败，请检查脚本')
+                // wxNoticeErr.push(($.nickName || $.UserName) + ':')
+                // wxNoticeErr.push($.UserName + ': 接口sign请求失败，请检查脚本')
             } finally {
                 resolve(data);
             }
@@ -183,8 +183,8 @@ function cash(orderId) {
             try {
                 if (err) {
                     console.error(`${JSON.stringify(err)}`)
-                    wxNoticeErr.push(($.nickName || $.UserName) + ':')
-                    wxNoticeErr.push('提现失败，请检查脚本')
+                    // wxNoticeErr.push(($.nickName || $.UserName) + ':')
+                    // wxNoticeErr.push('提现失败，请检查脚本')
                     return
                 }
                 // console.debug('cash:', data)
@@ -192,17 +192,17 @@ function cash(orderId) {
                 let msg_temp
                 if (data.success) {
                     msg_temp = $.productName + ' 提现成功'
-                } else {
-                    msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
                     wxNoticeErr.push(($.nickName || $.UserName) + ':')
                     wxNoticeErr.push(msg_temp)
+                } else {
+                    msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
                 }
                 console.log(msg_temp)
                 msg.push(msg_temp)
             } catch (e) {
                 $.logErr(e, resp)
-                wxNoticeErr.push(($.nickName || $.UserName) + ':')
-                wxNoticeErr.push($.UserName + ': 接口cash请求失败，请检查脚本')
+                // wxNoticeErr.push(($.nickName || $.UserName) + ':')
+                // wxNoticeErr.push($.UserName + ': 接口cash请求失败，请检查脚本')
             } finally {
                 resolve(data);
             }
