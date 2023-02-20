@@ -158,6 +158,10 @@ function sign(orderId) {
                     wxNoticeErr.push(msg_temp)
                 } else {
                     msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
+                    if (data.code === 400013) {
+                        wxNoticeErr.push(($.nickName || $.UserName) + ':')
+                        wxNoticeErr.push(msg_temp)
+                    }
                 }
                 console.log(msg_temp)
                 msg.push(msg_temp)
