@@ -178,7 +178,7 @@ function getQywxOptions(msgtype, title, content, summary = '') {
                         author: `智能助手`,
                         content_source_url: ``,
                         content: `${html}`,
-                        digest: `${summary}`
+                        digest: `${content}\n${summary}`
                     }]
                 }
             }
