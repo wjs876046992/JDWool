@@ -7,7 +7,7 @@ function getUserInfo() {
         fs.mkdirSync(dir)
     }
     if (!fs.existsSync(filePath)) {
-        fs.writeFileSync(filePath, "[]")
+        fs.writeFileSync(filePath, "{}")
     }
     const op = { encoding: "utf8" }
     const data = fs.readFileSync(filePath, op).toString() || "{}"

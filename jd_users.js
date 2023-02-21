@@ -36,6 +36,8 @@ const forceUpdate = process.env.FORCE_UPDATE_USER || false
             user.updateTime = $.time("yyyy-MM-dd H:m:s")
             console.log(JSON.stringify(user))
             UserInfo[pin] = user
+
+            await $.wait($.randomWaitTime(1, 3))
         }
     }
     updateUserInfo(UserInfo)
