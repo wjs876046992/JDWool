@@ -33,7 +33,7 @@ const forceUpdate = process.env.FORCE_UPDATE_USER || false
                 continue
             }
             user.nickname = ret.nickname
-            user.updateTime = $.time("yyyy-MM-dd H:m:s")
+            user.updateTime = $.time("yyyy-MM-dd HH:mm:ss")
             console.log(JSON.stringify(user))
             UserInfo[pin] = user
 
