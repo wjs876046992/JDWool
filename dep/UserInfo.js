@@ -1,7 +1,11 @@
 const fs = require("fs")
-const filePath = "./data/users.json"
+const dir = './data'
+const filePath = `${dir}/users.json`
 
 function getUserInfo() {
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir)
+    }
     if (!fs.existsSync(filePath)) {
         fs.writeFileSync(filePath, "[]")
     }
