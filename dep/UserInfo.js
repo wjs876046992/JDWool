@@ -11,7 +11,7 @@ function getUserInfo() {
     }
     const op = { encoding: "utf8" }
     const data = fs.readFileSync(filePath, op).toString() || "{}"
-    return  JSON.parse(data)
+    return JSON.parse(data)
 }
 
 function updateUserInfo(users) {

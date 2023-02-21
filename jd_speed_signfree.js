@@ -158,12 +158,12 @@ function sign(orderId) {
                 let msg_temp
                 if (data.success) {
                     msg_temp = $.productName + ' 签到成功'
-                    wxNoticeErr.push(($.nickName || $.UserName) + ':')
+                    wxNoticeErr.push('\n' + ($.nickName || $.UserName) + ':')
                     wxNoticeErr.push(msg_temp)
                 } else {
                     msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
                     if (data.code === 400013) {
-                        wxNoticeErr.push(($.nickName || $.UserName) + ':')
+                        wxNoticeErr.push('\n' + ($.nickName || $.UserName) + ':')
                         wxNoticeErr.push(msg_temp)
                     }
                 }
@@ -200,7 +200,7 @@ function cash(orderId) {
                 let msg_temp
                 if (data.success) {
                     msg_temp = $.productName + ' 提现成功'
-                    wxNoticeErr.push(($.nickName || $.UserName) + ':')
+                    wxNoticeErr.push('\n' + ($.nickName || $.UserName) + ':')
                     wxNoticeErr.push(msg_temp)
                 } else {
                     msg_temp = $.productName + ' ' + (data.errMsg || '未知错误')
