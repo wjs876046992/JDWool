@@ -1,6 +1,6 @@
 /**
  *
- * cron: 2 0 * * * 获取用户信息
+ * cron: 2 0 * * * jd_users.js 获取用户信息
  */
 
 const Env = require('./dep/Env')
