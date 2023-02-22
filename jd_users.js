@@ -8,6 +8,7 @@ const $ = new Env('获取用户信息')
 // const notify = $.isNode() ? require('./dep/SendNotify') : ''
 //Node.js用户请在jdCookie.js处填写京东ck
 const jdCookieNode = $.isNode() ? require('./dep/jdCookie') : ''
+const callAPI = require('./dep/ApiCaller')
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = []
 
@@ -43,18 +44,6 @@ const forceUpdate = process.env.FORCE_UPDATE_USER || false
     updateUserInfo(UserInfo)
 
 })()
-
-function jsonParse(str) {
-    if (typeof str == "string") {
-        try {
-            return JSON.parse(str)
-        } catch (e) {
-            console.log(e)
-            $.msg($.name, '', '请勿随意在BoxJs输入框修改内容\n建议通过脚本去获取cookie')
-            return []
-        }
-    }
-}
 async function QueryJDUserInfo(cookie, ua) {
     const options = {
         "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,
@@ -80,30 +69,4 @@ async function QueryJDUserInfo(cookie, ua) {
         isLogin: data['retcode'] !== 13,
         nickname: data['retcode'] === 0 && (data['base'].nickname || data['base'].curPin)
     }
-}
-
-function callAPI(options) {
-    return new Promise(resolve => {
-        $.post(options, (err, resp, data) => {
-            const ret = {
-                code: 0,
-                data: null,
-                errMsg: null
-            }
-            if (err) {
-                ret.code = -1001
-                ret.errMsg = JSON.stringify(err)
-            }
-            if (!data) {
-                ret.code = -1002
-                ret.errMsg = '服务器返回空数据'
-            }
-            if (typeof data  == 'object' && Object.keys(data).length > 0) {
-                ret.data = data
-            } else {
-                ret.data = jsonParse(data)
-            }
-            resolve(ret)
-        })
-    })
 }

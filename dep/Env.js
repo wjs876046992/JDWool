@@ -398,6 +398,30 @@ function Env(t, e) {
                     ? this.getdata('JSUA')
                     : "'jdltapp;iPad;3.1.0;14.4;network/wifi;Mozilla/5.0 (iPad; CPU OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
         }
+
+        jsonParse(str) {
+            if (typeof str == "string") {
+                try {
+                    return JSON.parse(str)
+                } catch (e) {
+                    return str
+                }
+            }
+        }
+
+        serializeQueryParams = (obj, escape = true) => {
+            const arr = [];
+            for(let i in obj) {
+                if (obj.hasOwnProperty(i)) {
+                    if (escape) {
+                        arr.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]))
+                    } else {
+                        arr.push(`${i}=${obj[i]}`)
+                    }
+                }
+            }
+            return arr.join("&")
+        }
     }(t, e)
 }
 
