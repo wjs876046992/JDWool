@@ -70,7 +70,7 @@ if ($.isNode()) {
                 const sendWXNotice = $.isNode() ? require('./dep/WXLovelyCat_Notify') : false
                 sendWXNotice && sendWXNotice(`dpqdql ${expiredTokens.join("&")}`)
             }
-            console.log(message.join('\n'))
+            console.log(message.join('\n'), '\n')
             await $.wait($.randomWaitTime(1, 3))
         }
     }
@@ -130,12 +130,14 @@ async function getActivityInfo(token) {
             const userPrizeRuleStatus = data.data.continuePrizeRuleList[i].userPrizeRuleStatus
             let userPrizeRuleStatusText
             if (userPrizeRuleStatus === 3) {
-                userPrizeRuleStatusText = '是否达标：已达标'
+                userPrizeRuleStatusText = '是否达标：已达标未抢到'
             } else if (userPrizeRuleStatus === 1) {
                 userPrizeRuleStatusText = '是否达标：未达标'
+            } else if (userPrizeRuleStatus === 2) {
+                userPrizeRuleStatusText = '是否达标：已达标已领取'
             } else {
                 message.push(`userPrizeRuleStatus: ${userPrizeRuleStatus}`)
-                userPrizeRuleStatusText = '???'
+                userPrizeRuleStatusText = '是否达标：???'
             }
             const days = data.data.continuePrizeRuleList[i].days
             const prize = data.data.continuePrizeRuleList[i].prizeList[0]
@@ -153,7 +155,7 @@ async function getActivityInfo(token) {
                 awardName = `${interactPrizeSku.skuName}, 原价: ${interactPrizeSku.jdPrice}元, 折扣价${interactPrizeSku.promoPrice}元`
             } else {
                 message.push(`type: ${type}`)
-                awardName = '???'
+                awardName = '奖品种类：???'
             }
             let awardType
             const prizeStatus = prize.status
@@ -163,7 +165,7 @@ async function getActivityInfo(token) {
                 awardType = '库存：有'
             } else {
                 message.push(`prizeStatus: ${prizeStatus}`)
-                awardType = '???'
+                awardType = '库存：???'
             }
             const mes = `签到${days}天, 获得${discount}${awardName}, ${userPrizeRuleStatusText}, ${awardType}`
             message.push(mes)
