@@ -133,14 +133,14 @@ async function getActivityInfo(token) {
             const userPrizeRuleStatus = data.data.continuePrizeRuleList[i].userPrizeRuleStatus
             let userPrizeRuleStatusText
             if (userPrizeRuleStatus === 3) {
-                userPrizeRuleStatusText = '是否达标：已达标未抢到'
+                userPrizeRuleStatusText = '规则状态：已抢光'
             } else if (userPrizeRuleStatus === 1) {
-                userPrizeRuleStatusText = '是否达标：未达标'
+                userPrizeRuleStatusText = '规则状态：未达标'
             } else if (userPrizeRuleStatus === 2) {
-                userPrizeRuleStatusText = '是否达标：已达标已领取'
+                userPrizeRuleStatusText = '规则状态：已领取'
             } else {
                 message.push(`userPrizeRuleStatus: ${userPrizeRuleStatus}`)
-                userPrizeRuleStatusText = '是否达标：???'
+                userPrizeRuleStatusText = '规则状态：???'
             }
             const days = data.data.continuePrizeRuleList[i].days
             const prize = data.data.continuePrizeRuleList[i].prizeList[0]
@@ -160,8 +160,8 @@ async function getActivityInfo(token) {
                 message.push(`type: ${type}`)
                 awardName = '奖品种类：???'
             }
-            let awardType
-            const prizeStatus = prize.status
+            let awardType = `prizeStatus: ${prize.status}`
+            /*const prizeStatus = prize.status
             if (prizeStatus === 5) {
                 awardType = '库存：无'
             } else if (prizeStatus === 2) {
@@ -169,7 +169,7 @@ async function getActivityInfo(token) {
             } else {
                 message.push(`prizeStatus: ${prizeStatus}`)
                 awardType = '库存：???'
-            }
+            }*/
             const mes = `签到${days}天, 获得${discount}${awardName}, ${userPrizeRuleStatusText}, ${awardType}`
             message.push(mes)
         }
