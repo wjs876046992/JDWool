@@ -87,6 +87,9 @@ if ($.isNode()) {
 async function dpqd() {
     message = []
     const tks = $.index === 1 ? token : validTokens
+    if (tks.length === 0) {
+        return
+    }
     message.push(`\n******开始【京东账号${$.index}】${$.nickName}*********\n`)
     for (let j = 0; j < tks.length; j++) {
         const tk = tks[j]
@@ -97,7 +100,7 @@ async function dpqd() {
         const {venderId, activityId} = await getActivityInfo(tk)
         if (!venderId) {
             message.push(`活动状态：已失效`)
-            expiredTokens.push(token)
+            expiredTokens.push(tk)
             continue
         }
         const shopName = await getVenderName(venderId)
