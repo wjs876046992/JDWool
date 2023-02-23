@@ -1,7 +1,7 @@
 // 可爱猫通知对接
 const request = require('request')
 
-const sendWXNotice = function (msg, to_wxids) {
+const sendWXNotice = async (msg, to_wxids) => {
     const kam_addr = process.env.KAM_ADDR || ''
     const kam_wxid = process.env.KAM_BOT_ID || ''
     const kam_token = process.env.KAM_TOKEN || ''
@@ -28,7 +28,13 @@ const sendWXNotice = function (msg, to_wxids) {
             })
         }
         request(options)
+        await sleep(2000)
     }
+}
+function sleep(duration) {
+    return new Promise(resolve => {
+        setTimeout(resolve, duration);
+    })
 }
 
 module.exports = sendWXNotice
