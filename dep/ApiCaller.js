@@ -28,6 +28,7 @@ function callback(resolve) {
 }
 
 function callAPI(options) {
+    options.timeout = options.timeout || process.env.API_TIMEOUT || 15000
     return options.method === 'post' ?
         new Promise(resolve => {
             $.post(options, callback(resolve))

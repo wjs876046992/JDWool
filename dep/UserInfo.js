@@ -1,5 +1,5 @@
 const fs = require("fs")
-const dir = './dep/data'
+const dir = `${__dirname}/data`
 const filePath = `${dir}/users.json`
 
 function getUserInfo() {
