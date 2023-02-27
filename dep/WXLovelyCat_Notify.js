@@ -27,8 +27,12 @@ const sendWXNotice = async (msg, to_wxids) => {
                 'msg': `${msg}`
             })
         }
-        request(options)
-        await sleep(2000)
+        try {
+            request(options)
+            await sleep(2000)
+        } catch (e) {
+            console.log(`发送WeChat失败`)
+        }
     }
 }
 function sleep(duration) {
