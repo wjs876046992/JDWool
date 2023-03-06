@@ -1,7 +1,16 @@
 // 可爱猫通知对接
 const request = require('request')
+const OPEN_WX_NOTICE = process.env.OPEN_WX_NOTICE || false
+
+if (!OPEN_WX_NOTICE) {
+    console.log(`export OPEN_WX_NOTICE="true"开启微信通知`)
+}
 
 const sendWXNotice = async (msg, to_wxids) => {
+
+    if (!OPEN_WX_NOTICE) {
+        return
+    }
     const kam_addr = process.env.KAM_ADDR || ''
     const kam_wxid = process.env.KAM_BOT_ID || ''
     const kam_token = process.env.KAM_TOKEN || ''

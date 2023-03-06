@@ -52,12 +52,12 @@ function sendQYWXAMNotice(pin, title, content, summary = '') {
  * @returns {Promise<*>}
  */
 async function generateAccessToken() {
-    $.log('QYWX token已失效，重新获取...')
+    console.log('QYWX token已失效，重新获取...')
     const tokenResult = await getQYWXAccessToken(corpid, corpsecret)
     accessToken = tokenResult.access_token
     if (!accessToken) {
         accessTokenExpiredAt = undefined
-        $.log('access_token获取失败.', JSON.stringify(tokenResult))
+        console.error('access_token获取失败.', JSON.stringify(tokenResult))
         throw Error('access_token获取失败')
     }
     accessTokenExpiredAt = ((new Date()).getTime()) - (tokenResult.expires_in - 600) * 1000

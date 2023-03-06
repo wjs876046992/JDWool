@@ -69,6 +69,7 @@ if ($.isNode()) {
                 // 第一个账号结束后，清理过期token
                 const sendWXNotice = $.isNode() ? require('./dep/WXLovelyCat_Notify') : false
                 sendWXNotice && sendWXNotice(`dpqdql ${expiredTokens.join("&")}`)
+                notify.sendNotify('', `dpqdql ${expiredTokens.join("&")}`, '')
             }
             console.log(message.join('\n'), '\n')
             await $.wait($.randomWaitTime(1, 3))
