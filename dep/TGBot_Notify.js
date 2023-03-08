@@ -40,7 +40,7 @@ async function tgBotNotify(text, desp, notifyBy = 'Notify By HermanWu') {
     }
     const ret = await callAPI(options)
     if (ret.code !== 0) {
-        console.log(ret.errorMsg)
+        console.log(`Telegram发送失败，未知错误：${ret.code}, ${ret.errorMsg}`)
         return
     }
     if (ret.data.ok) {

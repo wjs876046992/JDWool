@@ -40,7 +40,9 @@ function sendQYWXAMNotice(pin, title, content, summary = '') {
         const qywxOptions = getQywxOptions(msgtype, title, content, summary);
         const notice = await doSendQYWXNotice(accessToken, touser, agentid, qywxOptions)
         if (!notice || notice.errcode !== 0) {
-            $.log(touser, JSON.stringify(qywxOptions), JSON.stringify(notice))
+            console.log(touser, JSON.stringify(qywxOptions), JSON.stringify(notice))
+        } else {
+            console.log('企业微信发送通知消息成功🎉\n')
         }
         resolve(notice)
     })
