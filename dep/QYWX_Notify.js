@@ -60,7 +60,7 @@ async function generateAccessToken() {
         console.error('access_token获取失败.', JSON.stringify(tokenResult))
         throw Error('access_token获取失败')
     }
-    accessTokenExpiredAt = ((new Date()).getTime()) - (tokenResult.expires_in - 600) * 1000
+    accessTokenExpiredAt = ((new Date()).getTime()) + (tokenResult.expires_in - 600) * 1000
 }
 
 /**
