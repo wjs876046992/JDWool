@@ -1,5 +1,5 @@
 /**
- * cron 30 21 * * * jd_bean_change.js
+ * cron 12 12 29 2 ? jd_bean_change.js
  */
 const Env = require('./common/Env')
 const $ = new Env('京东资产变动')
@@ -123,7 +123,6 @@ let TempBaipiao = "";
 let llgeterror = false;
 
 let doExJxBeans = "false";
-let time = new Date().getHours();
 if ($.isNode()) {
     if (process.env.WP_APP_TOKEN_ONE) {
         WP_APP_TOKEN_ONE = process.env.WP_APP_TOKEN_ONE;
@@ -436,13 +435,13 @@ if (!EnableCheckBean) {
 
     //其他通知
     if (allReceiveMessage) {
-        allMessage2 = `【⏰商品白嫖活动领取提醒⏰】\n` + allReceiveMessage;
+        allMessage2 = `【⏰商品白嫖活动领取提醒⏰】\n` + allReceiveMessage
     }
     if (allWarnMessage) {
         if (allMessage2) {
-            allMessage2 = `\n` + allMessage2;
+            allMessage2 = `\n` + allMessage2
         }
-        allMessage2 = `【⏰商品白嫖活动任务提醒⏰】\n` + allWarnMessage + allMessage2;
+        allMessage2 = `【⏰商品白嫖活动任务提醒⏰】\n` + allWarnMessage + allMessage2
     }
 
 
@@ -454,7 +453,7 @@ if (!EnableCheckBean) {
         await notify.sendNotify(`${$.name}`, `${allMessage}`, {
             url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
         }, '\n\n本通知 By ccwav Mod', TempMessage)
-        await $.wait(10 * 1000);
+        await $.wait(10 * 1000)
     }
 
     if ($.isNode() && allMessage2) {
@@ -462,7 +461,7 @@ if (!EnableCheckBean) {
         await notify.sendNotify("京东白嫖榜", `${allMessage2}`, {
             url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
         })
-        await $.wait(10 * 1000);
+        await $.wait(10 * 1000)
     }
 
     // hermanwu 分组合并推送
@@ -501,8 +500,6 @@ if (!EnableCheckBean) {
     })
 
 async function showMsg() {
-    //if ($.errorMsg)
-    //return
     ReturnMessageTitle = "";
     ReturnMessage = "";
     var strsummary = "";
