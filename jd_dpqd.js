@@ -24,14 +24,14 @@ if (!token.length) {
 }
 console.log(token)
 
-const Env = require('./dep/Env')
+const Env = require('./common/Env')
 const $ = new Env('店铺签到')
-const notify = $.isNode() ? require('./dep/SendNotify') : ''
+const notify = $.isNode() ? require('./notice/SendNotify') : ''
 //Node.js用户请在jdCookie.js处填写京东ck
 const jdCookieNode = $.isNode() ? require('./dep/jdCookie') : ''
 const runAccountNum = process.env.DPQD_RUN_NUM || 5
 const {getUserInfo} = require('./dep/UserInfo')
-const callAPI = require('./dep/ApiCaller')
+const callAPI = require('./common/ApiCaller')
 
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message = []
@@ -67,7 +67,7 @@ if ($.isNode()) {
             await dpqd()
             if (i === 0 && expiredTokens.length > 0) {
                 // 第一个账号结束后，清理过期token
-                const sendWXNotice = $.isNode() ? require('./dep/WXLovelyCat_Notify') : false
+                const sendWXNotice = $.isNode() ? require('./notice/WXLovelyCat_Notify') : false
                 sendWXNotice && sendWXNotice(`dpqdql ${expiredTokens.join("&")}`)
                 notify.sendNotify('', `dpqdql ${expiredTokens.join("&")}`, '')
             }

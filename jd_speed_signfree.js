@@ -3,9 +3,9 @@
   京东极速版,先下单,第二天开始签到
   18 8,14,20 * * * jd_speed_signfree.js 签到免单
 */
-const Env = require('./dep/Env')
+const Env = require('./common/Env')
 const $ = new Env('京东极速版签到免单');
-const notify = $.isNode() ? require('./dep/SendNotify') : '';
+const notify = $.isNode() ? require('./notice/SendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./dep/jdCookie') : '';
 const UA = $.isNode()
@@ -57,7 +57,7 @@ const JD_API_HOST = 'https://api.m.jd.com/';
         await notify.sendNotify($.name, msg.join('\n'))
     }
     if (wxNoticeErr.length) {
-        const sendWXNotice = $.isNode() ? require('./dep/WXLovelyCat_Notify') : false
+        const sendWXNotice = $.isNode() ? require('./notice/WXLovelyCat_Notify') : false
         wxNoticeErr.unshift($.name)
         sendWXNotice && sendWXNotice(wxNoticeErr.join('\n'))
     }

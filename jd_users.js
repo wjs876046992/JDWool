@@ -3,12 +3,12 @@
  * cron: 2 0 * * * jd_users.js 获取用户信息
  */
 
-const Env = require('./dep/Env')
+const Env = require('./common/Env')
 const $ = new Env('获取用户信息')
 // const notify = $.isNode() ? require('./dep/SendNotify') : ''
 //Node.js用户请在jdCookie.js处填写京东ck
 const jdCookieNode = $.isNode() ? require('./dep/jdCookie') : ''
-const callAPI = require('./dep/ApiCaller')
+const callAPI = require('./common/ApiCaller')
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = []
 
